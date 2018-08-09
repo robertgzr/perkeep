@@ -8,6 +8,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/FiloSottile/b2 v0.0.0-20170207175032-b197f7a2c317 h1:1GuMjC4tjfwnWBdoTS7YqtQ3JIsEft6NRcdmXdzvYYc=
 github.com/FiloSottile/b2 v0.0.0-20170207175032-b197f7a2c317/go.mod h1:3DBotXAz3n/g1px/orhrK7xBJLjfaJRRrsEAJiUYEtY=
 github.com/PuerkitoBio/goquery v1.5.0/go.mod h1:qD2PgZ9lccMbQlc7eEOjaeRlFQON7xY8kdmcsrnKqMg=
+github.com/ahmdrz/goinsta/v2 v2.4.1-0.20190510152949-903ea3101245 h1:W4UU/mMm1UKBCb0a+XpWPsVi3GB3aTiA1UlkwTR+VLU=
+github.com/ahmdrz/goinsta/v2 v2.4.1-0.20190510152949-903ea3101245/go.mod h1:M6/Tnc41f4gn+rl9HxFaNY1c6Px5zQWHgyY6S/wSZFs=
 github.com/andybalholm/cascadia v1.0.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/aws/aws-sdk-go v1.14.31 h1:amhorvKh1zNxo9YCntvA5uDmgw+pCYXOp4xO8WS1oDg=
 github.com/aws/aws-sdk-go v1.14.31/go.mod h1:mFuSZ37Z9YOHbQEwBWztmVzqXrEkub65tZoCYDt7FT0=

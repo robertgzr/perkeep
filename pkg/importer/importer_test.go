@@ -45,16 +45,16 @@ func TestStaticConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 	host := h.(*Host)
-	if g, w := host.imp["dummy1"].clientID, "id1"; g != w {
+	if g, w := host.imp["dummy1"].clientIDStatic, "id1"; g != w {
 		t.Errorf("dummy1 id = %q; want %q", g, w)
 	}
-	if g, w := host.imp["dummy1"].clientSecret, "secret1"; g != w {
+	if g, w := host.imp["dummy1"].clientSecretStatic, "secret1"; g != w {
 		t.Errorf("dummy1 secret = %q; want %q", g, w)
 	}
-	if g, w := host.imp["dummy2"].clientID, "id2"; g != w {
+	if g, w := host.imp["dummy2"].clientIDStatic, "id2"; g != w {
 		t.Errorf("dummy2 id = %q; want %q", g, w)
 	}
-	if g, w := host.imp["dummy2"].clientSecret, "secret2"; g != w {
+	if g, w := host.imp["dummy2"].clientSecretStatic, "secret2"; g != w {
 		t.Errorf("dummy2 secret = %q; want %q", g, w)
 	}
 

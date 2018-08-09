@@ -131,9 +131,16 @@ var tmpl = template.Must(template.New("root").Funcs(map[string]interface{}{
 	{{if .Importer.InsecureForm}}
 	<h1 style="color:red;">This page is not served securely (no https). Proceed at your own risk.</h1>
 	{{end}}
+	{{if .Importer.MemoryOnlyClientSecret}}
+	<h1 style="color:red;">Your password will not be stored.</h1>
+	{{end}}
     <h1>Client ID &amp; Client Secret</h1>
     <form method='post'>
+    {{ if .Importer.MemoryOnlyClientSecret }}
+      <input type='hidden' name="mode" value="saveclientid">
+    {{ else }}
       <input type='hidden' name="mode" value="saveclientidsecret">
+    {{ end }}
       <table border=0 cellpadding=3>
       <tr><td align=right>Client ID</td><td><input name="clientID" size=50 value="{{.Importer.ClientID}}"></td></tr>
       <tr><td align=right>Client Secret</td><td><input name="clientSecret" type=password size=50 value="{{.Importer.ClientSecret}}"></td></tr>

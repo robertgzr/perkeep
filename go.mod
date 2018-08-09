@@ -6,6 +6,7 @@ require (
 	bazil.org/fuse v0.0.0-20160811212531-371fbbdaa898
 	cloud.google.com/go v0.39.0
 	github.com/FiloSottile/b2 v0.0.0-20170207175032-b197f7a2c317
+	github.com/ahmdrz/goinsta/v2 v2.4.1-0.20190510152949-903ea3101245
 	github.com/aws/aws-sdk-go v1.14.31
 	github.com/bradfitz/latlong v0.0.0-20140711231157-b74550508561
 	github.com/cznic/fileutil v0.0.0-20180108211300-6a051e75936f // indirect

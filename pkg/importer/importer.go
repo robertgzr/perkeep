@@ -123,6 +123,12 @@ type Properties struct {
 	// For example, this is "foursquare" for "swarm", so "swarm" shows
 	// in the UI and URLs, but it's "foursquare" in permanodes.
 	PermanodeImporterType string
+
+	// MemoryOnlyClientSecret optionally instructs the importer to never
+	// store the clientSecret in a permanode, and to only keep it in memory.
+	// This is useful when creating importers that do not support OAuth flow,
+	// like the instagram one.
+	MemoryOnlyClientSecret bool
 }
 
 // LongPoller is optionally implemented by importers which can long
@@ -240,12 +246,12 @@ func NewHost(hc HostConfig) (*Host, error) {
 		}
 		props := impl.Properties()
 		imp := &importer{
-			host:         h,
-			name:         k,
-			impl:         impl,
-			props:        &props,
-			clientID:     clientId,
-			clientSecret: clientSecret,
+			host:               h,
+			name:               k,
+			impl:               impl,
+			props:              &props,
+			clientIDStatic:     clientId,
+			clientSecretStatic: clientSecret,
 		}
 		h.imp[k] = imp
 	}
@@ -655,6 +661,20 @@ func (h *Host) serveImporterPost(w http.ResponseWriter, r *http.Request, imp *im
 			return
 		}
 		http.Redirect(w, r, h.ImporterBaseURL()+imp.name, http.StatusFound)
+	case "saveclientid":
+		n, err := imp.Node()
+		if err != nil {
+			http.Error(w, "Error getting node: "+err.Error(), 500)
+			return
+		}
+		if err := n.SetAttrs(
+			attrClientID, r.FormValue("clientID"),
+		); err != nil {
+			http.Error(w, "Error saving node: "+err.Error(), 500)
+			return
+		}
+		imp.clientSecret = r.FormValue("clientSecret")
+		http.Redirect(w, r, h.ImporterBaseURL()+imp.name, http.StatusFound)
 	}
 }
 
@@ -788,9 +808,11 @@ type importer struct {
 	impl  Importer
 	props *Properties // impl.Properties; pointer so we crash on & find uninitialized callers
 
-	// If statically configured in config file, else
-	// they come from the importer node's attributes.
-	clientID     string
+	// clientIDStatic and clientSecretStatic are set from the server config file.
+	clientIDStatic     string
+	clientSecretStatic string
+	// clientSecret is the imported account password, set during account setup,
+	// if MemoryOnlyClientSecret is true.
 	clientSecret string
 
 	nodemu    sync.Mutex // guards nodeCache
@@ -829,7 +851,9 @@ func (im *importer) ImporterType() string {
 	return im.name
 }
 
-func (im *importer) StaticConfig() bool { return im.clientSecret != "" }
+// StaticConfig returns true if this importer sources the client
+// credentials from the server config file
+func (im *importer) StaticConfig() bool { return im.clientSecretStatic != "" }
 
 // URL returns the importer's URL without trailing slash.
 func (im *importer) URL() string { return im.host.ImporterBaseURL() + im.name }
@@ -842,6 +866,10 @@ func (im *importer) ShowClientAuthEditForm() bool {
 	}
 	return im.props.NeedsAPIKey
 }
+
+// MemoryOnlyClientSecret returns true if this importer only
+// stores the client secret in-memory and not in a permanode.
+func (im *importer) MemoryOnlyClientSecret() bool { return im.props.MemoryOnlyClientSecret }
 
 func (im *importer) InsecureForm() bool {
 	return !strings.HasPrefix(im.host.ImporterBaseURL(), "https://")
@@ -884,11 +912,14 @@ func (im *importer) Status() (status string, err error) {
 
 func (im *importer) credentials() (clientID, clientSecret string, err error) {
 	if im.StaticConfig() {
-		return im.clientID, im.clientSecret, nil
+		return im.clientIDStatic, im.clientSecretStatic, nil
 	}
 	n, err := im.Node()
 	if err != nil {
 		return
+	}
+	if im.MemoryOnlyClientSecret() {
+		return n.Attr(attrClientID), im.clientSecret, nil
 	}
 	return n.Attr(attrClientID), n.Attr(attrClientSecret), nil
 }

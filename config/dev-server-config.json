@@ -375,6 +375,9 @@
 				},
 				"instapaper": {
 					"clientSecret": ["_env", "${CAMLI_INSTAPAPER_API_KEY}", ""]
+				},
+				"instagram": {
+					"clientSecret": ["_env", "${CAMLI_INSTAGRAM_API_KEY}", ""]
 				}
 			}
 		},

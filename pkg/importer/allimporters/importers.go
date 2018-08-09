@@ -23,6 +23,7 @@ import (
 	_ "perkeep.org/pkg/importer/feed"
 	_ "perkeep.org/pkg/importer/flickr"
 	_ "perkeep.org/pkg/importer/gphotos"
+	_ "perkeep.org/pkg/importer/instagram"
 	_ "perkeep.org/pkg/importer/instapaper"
 	_ "perkeep.org/pkg/importer/mastodon"
 	_ "perkeep.org/pkg/importer/picasa"
@@ -47,10 +48,5 @@ func init() {
 		Title:       "Strava",
 		Description: "import workout data from Strava",
 		TODOIssue:   1125,
-	})
-	importer.RegisterTODO("instagram", importer.Properties{
-		Title:       "Instagram",
-		Description: "import photos from Instagram",
-		TODOIssue:   1126,
 	})
 }
